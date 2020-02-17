@@ -54,6 +54,8 @@ public class gabAPI : MonoBehaviour
     String lastJsonResult = null;
     String url = "https://trends.gab.com/trend-feed/json";
     RootObject root;
+    private float time = 0.0f;
+    private float updateTime = 60 * 2;
     // Start is called before the first frame update
     void Start()
     {
@@ -79,12 +81,18 @@ public class gabAPI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        time += Time.deltaTime;
+        if(time > updateTime)
+        {
+            time = 0;
+            requestData();
+        }
         //if (this.lastJsonResult != null)
         //{
         //    this.root = RootObject.CreateFromJSon(lastJsonResult);
         //}
     }
-    void requestData()
+    public void requestData()
     {
         Debug.Log("Requesting Data");
         StartCoroutine(getData());
