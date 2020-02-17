@@ -124,6 +124,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2cfee0dc84234e94a2862f40e16c871, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  goToGabTrendsPage: 0
+  item:
+    id: 
+    url: 
+    title: 
+    description: 
+    image: 
+    date_published: 
+    date_modified: 
+    author:
+      name: 
+      url: 
 --- !u!1 &3029144146049748270
 GameObject:
   m_ObjectHideFlags: 0
