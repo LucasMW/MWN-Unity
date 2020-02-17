@@ -51,6 +51,9 @@ public class UIManager : MonoBehaviour
         foreach (Item item in items)
         {
             GameObject cell = fixedCells[index];
+            ClickDetector detector = cell.GetComponent<ClickDetector>();
+            detector.item = item;
+
             Image img = cell.GetComponentInChildren<Image>();
             
             Text[] texts = cell.GetComponentsInChildren<Text>();
