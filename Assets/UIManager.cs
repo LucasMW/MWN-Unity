@@ -95,7 +95,13 @@ public class UIManager : MonoBehaviour
         else
         {
             Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, 434, 300), new Vector2(0.5f, 0.5f));
+            Sprite sprite;
+            if(texture.height < 300 || texture.width < 434)
+                sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            else
+            {
+                sprite = Sprite.Create(texture, new Rect(0, 0, 434, 300), new Vector2(0.5f, 0.5f));
+            }
             if (sprite == null)
             {
                 Debug.LogError("Sprite is null");
