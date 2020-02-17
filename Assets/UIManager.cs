@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     Item[] items;
     GameObject[] fixedCells;
     private float time = 0.0f;
-    public float interpolationPeriod = 1000;
+    public float interpolationPeriod;
     // Start is called before the first frame update
     void Start()
     {
@@ -28,20 +28,15 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         time += Time.deltaTime;
-
         if (time >= interpolationPeriod)
         {
-            time = time - interpolationPeriod;
-
+            time = 0;
             items = gabApiObject.getItems();
             if (items.Length > 1)
             {
                 UpdateUI(items);
             }
         }
-        
-        
-        
     }
     void UpdateUI(Item[] items)
     {
