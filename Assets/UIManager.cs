@@ -11,11 +11,14 @@ public class UIManager : MonoBehaviour
     public Dictionary<string,Image> imageDict;
     public gabAPI gabApiObject;
     Item[] items;
+    GameObject[] fixedCells;
     // Start is called before the first frame update
     void Start()
     {
         imageDict = new Dictionary<string, Image>(30);
         items = new Item[0];
+        fixedCells = GameObject.FindGameObjectsWithTag("Cell");
+        Debug.LogWarning("fixedCells " + fixedCells.Length);
         
     }
 
@@ -36,10 +39,11 @@ public class UIManager : MonoBehaviour
     void UpdateUI(Item[] items)
     {
         Debug.Log("UpdateUI");
+        Debug.Log(items.Length);
         int index = 0;
         foreach (Item item in items)
         {
-            GameObject cell = Instantiate(cellPrefab);
+            GameObject cell = fixedCells[index];
             Image img = cell.GetComponent<Image>();
             
             Text[] texts = cell.GetComponentsInChildren<Text>();
@@ -54,10 +58,10 @@ public class UIManager : MonoBehaviour
                 img.overrideSprite = imageDict[item.url].sprite;
             }
             
-            cell.transform.position = new Vector3(viewPort.transform.position.x, viewPort.transform.position.y + index * 100);
-            cell.GetComponent<RectTransform>().SetParent(viewPort.transform);
-            cell.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 0, 10);
-            cell.layer = 5;
+            //cell.transform.position = new Vector3(viewPort.transform.position.x, viewPort.transform.position.y - index * 300);
+            //cell.GetComponent<RectTransform>().SetParent(viewPort.transform);
+            //cell.GetComponent<RectTransform>().SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, 10);
+            //cell.layer = 5;
             index += 1;
             
 
