@@ -8,14 +8,16 @@ public class UIManager : MonoBehaviour
 {
     public GameObject cellPrefab;
     public GameObject viewPort;
-    public Dictionary<string,Image> imageDict;
+    public Dictionary<string,Sprite> imageDict;
     public gabAPI gabApiObject;
     Item[] items;
     GameObject[] fixedCells;
+    private float time = 0.0f;
+    public float interpolationPeriod = 5;
     // Start is called before the first frame update
     void Start()
     {
-        imageDict = new Dictionary<string, Image>(30);
+        imageDict = new Dictionary<string, Sprite>(30);
         items = new Item[0];
         fixedCells = GameObject.FindGameObjectsWithTag("Cell");
         Debug.LogWarning("fixedCells " + fixedCells.Length);
@@ -25,15 +27,20 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(this.items.Length > 1)
+        time += Time.deltaTime;
+
+        if (time >= interpolationPeriod)
         {
-            return;
+            time = time - interpolationPeriod;
+
+            items = gabApiObject.getItems();
+            if (items.Length > 1)
+            {
+                UpdateUI(items);
+            }
         }
-        items = gabApiObject.getItems();
-        if (items.Length > 1)
-        {
-            UpdateUI(items);
-        }
+        
+        
         
     }
     void UpdateUI(Item[] items)
@@ -44,7 +51,7 @@ public class UIManager : MonoBehaviour
         foreach (Item item in items)
         {
             GameObject cell = fixedCells[index];
-            Image img = cell.GetComponent<Image>();
+            Image img = cell.GetComponentInChildren<Image>();
             
             Text[] texts = cell.GetComponentsInChildren<Text>();
             Debug.Log(texts.Length);
@@ -55,7 +62,9 @@ public class UIManager : MonoBehaviour
                 LoadImage(item.url, img);
             else
             {
-                img.overrideSprite = imageDict[item.url].sprite;
+                Debug.Log(img);
+                Debug.Log(imageDict[item.url]);
+                img.overrideSprite = imageDict[item.url];
             }
             
             //cell.transform.position = new Vector3(viewPort.transform.position.x, viewPort.transform.position.y - index * 300);
@@ -81,8 +90,9 @@ public class UIManager : MonoBehaviour
             Debug.Log(request.error);
         else
         {
-            //YourRawImage.overrideSprite = Sprite.Create(((DownloadHandlerTexture)request.downloadHandler).texture, YourRawImage.GetPixelAdjustedRect(), new Vector2(0, 0));
-            imageDict.Add(MediaUrl, YourRawImage);
+            Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+                imageDict.Add(MediaUrl, sprite);
         }
             //YourRawImage.mainTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
             
