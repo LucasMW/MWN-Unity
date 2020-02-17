@@ -2413,8 +2413,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 94225538}
   m_HandleRect: {fileID: 94225537}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.99999994
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3355,6 +3355,7 @@ MonoBehaviour:
   cellPrefab: {fileID: 850724666}
   viewPort: {fileID: 1640419079}
   gabApiObject: {fileID: 750241671}
+  interpolationPeriod: 2
 --- !u!4 &1278355951 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4354465822509128, guid: 85dfab9623c67784fa7894de63cd1604,

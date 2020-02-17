@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     Item[] items;
     GameObject[] fixedCells;
     private float time = 0.0f;
-    public float interpolationPeriod = 5;
+    public float interpolationPeriod = 1000;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,17 +54,21 @@ public class UIManager : MonoBehaviour
             Image img = cell.GetComponentInChildren<Image>();
             
             Text[] texts = cell.GetComponentsInChildren<Text>();
-            Debug.Log(texts.Length);
-            Debug.Log(texts[0].name);
+            //Debug.Log(texts.Length);
+            //Debug.Log(texts[0].name);
             texts[0].text = item.title;
             texts[1].text = item.description;
-            if(!imageDict.ContainsKey(item.url))
-                LoadImage(item.url, img);
+            //Debug.Log(item.image);
+            if(!imageDict.ContainsKey(item.image))
+                LoadImage(item.image);
             else
             {
-                Debug.Log(img);
-                Debug.Log(imageDict[item.url]);
-                img.overrideSprite = imageDict[item.url];
+                Sprite sprite = imageDict[item.image];
+                Debug.Log("image "+ img);
+                Debug.Log("sprite " + sprite);
+                img.sprite = sprite;
+                img.overrideSprite = sprite;
+                Debug.Log("sprite2: "+ img.sprite);
             }
             
             //cell.transform.position = new Vector3(viewPort.transform.position.x, viewPort.transform.position.y - index * 300);
@@ -77,12 +81,12 @@ public class UIManager : MonoBehaviour
 
         }
     }
-    void LoadImage(string url, Image imageRef)
+    void LoadImage(string url)
     {
-        StartCoroutine(DownloadImage(url,imageRef));
+        StartCoroutine(DownloadImage(url));
     }
 
-    IEnumerator DownloadImage(string MediaUrl, Image YourRawImage)
+    IEnumerator DownloadImage(string MediaUrl)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
@@ -91,8 +95,15 @@ public class UIManager : MonoBehaviour
         else
         {
             Texture2D texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, 434, 300), new Vector2(0.5f, 0.5f));
+            if (sprite == null)
+            {
+                Debug.LogError("Sprite is null");
+            }
+            if (!imageDict.ContainsKey(MediaUrl))
+            {
                 imageDict.Add(MediaUrl, sprite);
+            }
         }
             //YourRawImage.mainTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
             
